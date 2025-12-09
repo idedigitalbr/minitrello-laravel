@@ -13,7 +13,7 @@ class Card extends Model
         'due_date' => 'date',
     ];
 
-    public function taskList(): BelongsTo
+    public function taskList()
     {
         return $this->belongsTo(TaskList::class);
     }
