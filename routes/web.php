@@ -5,9 +5,20 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     return redirect()->route('login');
+});
+
+// Rota de emergência para rodar migrations
+Route::get('/migrate', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return '<h1>Sucesso! Tabelas criadas.</h1><br>' . nl2br(Artisan::output());
+    } catch (\Exception $e) {
+        return '<h1>Erro:</h1>' . $e->getMessage();
+    }
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
