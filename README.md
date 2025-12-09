@@ -14,7 +14,7 @@ Um aplicativo web de gerenciamento de tarefas inspirado no Trello, desenvolvido 
 
 - **Backend:** Laravel 12, PHP 8.2+
 - **Frontend:** Blade, TailwindCSS, Alpine.js
-- **Database:** SQLite (padrão) / PostgreSQL (produção)
+- **Database:** MySQL
 - **Build:** Vite
 
 ## 🚀 Instalação Local
@@ -24,6 +24,7 @@ Um aplicativo web de gerenciamento de tarefas inspirado no Trello, desenvolvido 
 - Composer
 - Node.js 18+
 - npm
+- MySQL
 
 ### Passos
 
@@ -45,28 +46,43 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-4. Execute as migrations:
+4. Configure o banco de dados no `.env`:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=minitrello
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+5. Execute as migrations:
 ```bash
 php artisan migrate
 ```
 
-5. Build dos assets:
+6. Build dos assets:
 ```bash
 npm run build
 ```
 
-6. Inicie o servidor:
+7. Inicie o servidor:
 ```bash
 php artisan serve
 ```
 
-7. Acesse: http://localhost:8000
+8. Acesse: http://localhost:8000
 
 ## 🚂 Deploy no Railway
 
-### Variáveis de Ambiente Necessárias
+### 1. Adicione um banco MySQL no Railway
+1. No seu projeto Railway, clique em **"+ New"**
+2. Selecione **"Database"** → **"MySQL"**
+3. Aguarde o banco ser criado
 
-Configure estas variáveis no painel do Railway:
+### 2. Variáveis de Ambiente
+
+Configure estas variáveis no painel do Railway (elas serão preenchidas automaticamente pelo MySQL do Railway):
 
 | Variável | Valor |
 |----------|-------|
@@ -75,12 +91,17 @@ Configure estas variáveis no painel do Railway:
 | `APP_KEY` | *(gerar com `php artisan key:generate --show`)* |
 | `APP_DEBUG` | false |
 | `APP_URL` | https://seu-app.railway.app |
-| `DB_CONNECTION` | sqlite |
+| `DB_CONNECTION` | mysql |
+| `DB_HOST` | *(do MySQL Railway - ex: mysql.railway.internal)* |
+| `DB_PORT` | *(do MySQL Railway - ex: 3306)* |
+| `DB_DATABASE` | *(do MySQL Railway - ex: railway)* |
+| `DB_USERNAME` | *(do MySQL Railway - ex: root)* |
+| `DB_PASSWORD` | *(do MySQL Railway)* |
 | `SESSION_DRIVER` | database |
 | `CACHE_STORE` | file |
 | `QUEUE_CONNECTION` | sync |
 
-### Deploy Automático
+### 3. Deploy Automático
 
 1. Faça push do código para o GitHub
 2. Conecte o repositório ao Railway
