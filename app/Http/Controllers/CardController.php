@@ -32,6 +32,12 @@ class CardController extends Controller
         return redirect()->back()->with('success', 'Card criado com sucesso!');
     }
 
+    public function show(Card $card)
+    {
+        $this->authorize('update', $card->taskList->board);
+        return response()->json($card);
+    }
+
     public function update(Request $request, Card $card)
     {
         $this->authorize('update', $card->taskList->board);
@@ -44,6 +50,10 @@ class CardController extends Controller
         ]);
 
         $card->update($request->only('title', 'description', 'color', 'due_date'));
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'card' => $card]);
+        }
 
         return redirect()->back()->with('success', 'Card atualizado!');
     }

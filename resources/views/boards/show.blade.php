@@ -118,7 +118,7 @@
             @endforeach
 
         </div>
-        
+
         <!-- Add List Button (Outside Sortable) -->
         <div class="px-2">
             <button class="add-list-btn" id="addListBtn" onclick="showAddList()">
@@ -294,40 +294,57 @@
                 form.method = 'POST';
                 form.action = `/lists/${listId}`;
                 form.innerHTML = `
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="name" value="${newName}">
-                `;
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="name" value="${newName}">
+                    `;
                 document.body.appendChild(form);
                 form.submit();
             }
         }
 
         // Card Modal
-        function openCard(cardId) {
+        async function openCard(cardId) {
             currentCardId = cardId;
-            const card = cards[cardId];
-            if (!card) return;
 
-            document.getElementById('cardForm').action = `/cards/${cardId}`;
-            document.getElementById('cardTitle').value = card.title;
-            document.getElementById('cardDescription').value = card.description || '';
-            document.getElementById('cardDueDate').value = card.due_date ? card.due_date.split('T')[0] : '';
+            // Show loading state or clear fields
+            document.getElementById('cardTitle').value = 'Carregando...';
 
-            // Reset color selection
-            document.querySelectorAll('#cardModal .color-option').forEach(opt => opt.classList.remove('selected'));
-            if (card.color) {
-                const colorInput = document.querySelector(`#cardModal input[value="${card.color}"]`);
-                if (colorInput) {
-                    colorInput.checked = true;
-                    colorInput.nextElementSibling.classList.add('selected');
+            try {
+                const response = await fetch(`/cards/${cardId}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (!response.ok) throw new Error('Falha ao carregar');
+
+                const card = await response.json();
+
+                document.getElementById('cardForm').action = `/cards/${cardId}`;
+                document.getElementById('cardTitle').value = card.title;
+                document.getElementById('cardDescription').value = card.description || '';
+                document.getElementById('cardDueDate').value = card.due_date ? card.due_date.split('T')[0] : '';
+
+                // Reset color selection
+                document.querySelectorAll('#cardModal .color-option').forEach(opt => opt.classList.remove('selected'));
+                if (card.color) {
+                    const colorInput = document.querySelector(`#cardModal input[value="${card.color}"]`);
+                    if (colorInput) {
+                        colorInput.checked = true;
+                        colorInput.nextElementSibling.classList.add('selected');
+                    }
+                } else {
+                    document.getElementById('cardColorNone').checked = true;
+                    document.querySelector('label[for="cardColorNone"]').classList.add('selected');
                 }
-            } else {
-                document.getElementById('cardColorNone').checked = true;
-                document.querySelector('label[for="cardColorNone"]').classList.add('selected');
-            }
 
-            new bootstrap.Modal(document.getElementById('cardModal')).show();
+                new bootstrap.Modal(document.getElementById('cardModal')).show();
+            } catch (error) {
+                console.error(error);
+                alert('Erro ao carregar dados do cartão.');
+            }
         }
 
         function deleteCard() {

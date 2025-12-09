@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Card extends Model
 {
-    protected $fillable = ['task_list_id', 'title', 'description', 'position', 'color', 'due_date'];
+    protected $fillable = ['task_list_id', 'title', 'position', 'description', 'due_date'];
 
     protected $casts = [
         'due_date' => 'date',

@@ -65,6 +65,23 @@
             flex-direction: column;
         }
 
+        /* Mobile Improvements */
+        @media (max-width: 768px) {
+            .board-container {
+                min-height: calc(100vh - 60px);
+                padding-bottom: 20px;
+            }
+
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .task-list {
+                min-width: 80vw;
+                max-width: 80vw;
+            }
+        }
+
         .task-list-header {
             padding: 0.75rem 1rem;
             font-weight: 600;
@@ -184,7 +201,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(0,0,0,0.15);">
         <div class="container-fluid px-4">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <i class="bi bi-kanban me-2"></i>LOREMIPSOM
+                <i class="bi bi-kanban me-2"></i>Mini Trello
             </a>
 
             <div class="d-flex align-items-center gap-3">
