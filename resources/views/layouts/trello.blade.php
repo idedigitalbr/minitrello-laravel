@@ -184,7 +184,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(0,0,0,0.15);">
         <div class="container-fluid px-4">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <i class="bi bi-kanban me-2"></i>Mini Trello
+                <i class="bi bi-kanban me-2"></i>LOREMIPSOM
             </a>
 
             <div class="d-flex align-items-center gap-3">
